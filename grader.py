@@ -111,7 +111,8 @@ while(getMore):
 	
 	newHR = modHR(Hr)           # edit the HackeRank file first ..... 
 	newCa = updateCanvas(Can,newHR,col,scaleDown)  #now update the canvas File!
-	
+	subPercent= (len(newHR) -1)/total_students
+	print(subPercent, " percent of students have submitted ", HRtail)
 	decide = int(input("Do you wish to continue updating? yes=1, no=0 "))
 
 	if decide == 1:
