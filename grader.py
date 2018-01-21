@@ -1,6 +1,6 @@
 import numpy as np
 import csv
-import tkinter as tk
+import tkinter
 from tkinter import filedialog
 import os
 import datetime
@@ -9,6 +9,8 @@ getMore = True
 
 #### Get a single Canvas CSV file to update! #############
 print("Please Select Canvas CSV file")
+root = tkinter.Tk()
+root.withdraw()
 Ca = filedialog.askopenfilename(title = "Select canvas file",filetypes = (("CSV files","*.csv"),("all files","*.*")))  # get directory +filename.csv
 head, tail = os.path.split(Ca)
 print("You are now editing canvas file: ",tail)
@@ -62,6 +64,7 @@ def newCanvas(nc):
 	with open(newCanName, "w") as output:
 		writer = csv.writer(output, lineterminator='\n')
 		writer.writerows(nc)
+	print("#######################################################################")
 	print("Successfully exported ",newCanName)
 	print("and it is ready to be uploaded to canvas!")
 
