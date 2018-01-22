@@ -25,27 +25,39 @@ print("for all ", total_students , " students! Hope this code works!")
 def modHR(Hr):
 	email = []
 	for row in range(1, len(Hr)):
-		thing =Hr[row][2]
-		thing = thing.lower()
-		Hr[row].insert(17, thing)
-	
-		if "@" in thing:
-			a,b = thing.split('@')
+		loginID =Hr[row][2]
+		Hr[row].insert(17, loginID)
+		loginID = loginID.lower()
+		if loginID == "athena.chan@temple.edu":
+			loginID = "tug52798@temple.edu"
+		if loginID == "ivy.attenborough@temple.edu":
+			loginID = "tug91461@temple.edu"
+		if loginID == "jake.smedley@temple.edu":
+			loginID = "tug94736@temple.edu"
+		
+		if "@" in loginID:
+			a,b = loginID.split('@')
 			email.append(a)
 			Hr[row].insert(18, a)
 			Hr[row][2] = a
 
 		else:
-			email.append(thing)
-			#print('Was not able to find @ symbol',thing)  # not always necessary unless you want to see all the types of emails students used to register for canvas
-			Hr[row].insert(18, thing)
-			Hr[row][2] =thing
+			email.append(loginID)
+			#print('Was not able to find @ symbol',thing)  # not always necessary unless you want to see all the types of emails students used to register for HR
+			Hr[row].insert(18, loginID)
+			Hr[row][2] =loginID
+	
+	#with open("mod_HR_DELETE.csv", "w") as output:
+	#	writer = csv.writer(output, lineterminator='\n')
+	#	writer.writerows(Hr)
+		
 	return Hr
 	
 	
 ### this  function creates ann error log with a time stamp
 def writeErrorLog(nomatch):
 	now = format(datetime.date.today())
+	
 	nows = str(now)
 	noMatchName = nows +'_unMatchedReport_' + HRtail
 	with open(noMatchName, "w") as output:
@@ -87,7 +99,8 @@ def updateCanvas(ca, hr, col, scale):
 			if rowz == len(ca)-2:
 				print("we could not match canvas id with submission associated with", tuID)
 				nomatches+=1
-				noMatchz.append(hr[row][17])
+				#noMatchz.append(hr[row][17])
+				noMatchz.append(hr[row][16])
 	writeErrorLog(noMatchz)
 	
 	return ca
