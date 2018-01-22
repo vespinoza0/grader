@@ -101,7 +101,9 @@ def updateCanvas(ca, hr, col, scale):
 				nomatches+=1
 				#noMatchz.append(hr[row][17])
 				noMatchz.append(hr[row][16])
-	writeErrorLog(noMatchz)
+	
+	if len(noMatchz)>0:
+		writeErrorLog(noMatchz)
 	
 	return ca
 	
@@ -128,7 +130,9 @@ while(getMore):
 	newHR = modHR(Hr)           # edit the HackeRank file first ..... 
 	newCa = updateCanvas(Can,newHR,col,scaleDown)  #now update the canvas File!
 	subPercent= (len(newHR) -1)/total_students
-	print(subPercent, " percent of students have submitted ", HRtail)
+	subPercent = subPercent*100
+	print( "%.2f" % subPercent," percent of students have submitted ", HRtail)
+	print(len(newHR)-1," students out of ", total_students," have completed this assignment")
 	decide = int(input("Do you wish to continue updating? yes=1, no=0 "))
 
 	if decide == 1:
