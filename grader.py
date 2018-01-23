@@ -108,6 +108,46 @@ def updateCanvas(ca, hr, col, scale):
 	return ca
 	
 
+def getCol(hrtail):
+	col = 1
+	if "Variables_in_JavaScript_" in hrtail:
+		col = 17
+		print("col from getcol is ", col)
+	elif "Data_Types_in_JavaScript_" in hrtail:
+		col = 18
+		print("col from getcol is ", col)
+	elif "Console_Input_and_Output_in_JavaScript_" in hrtail:
+		col = 19
+		print("col from getcol is ", col)
+	elif "Operators_in_JavaScript_" in hrtail:
+		col = 20
+		print("col from getcol is ", col)
+	elif "Conditional_Code_in_JavaScript_" in hrtail:
+		col = 21
+		print("col from getcol is ", col)
+	elif "Flow_Control_in_JavaScript_" in hrtail:
+		col = 22
+		print("col from getcol is ", col)
+	elif "Loops_in_JavaScript_" in hrtail:
+		col = 23
+		print("col from getcol is ", col)
+	elif "Debugging_in_JavaScript" in hrtail:
+		col = 24	
+		print("col from getcol is ", col)
+	elif "Functions_in_JavaScript_" in hrtail:
+		col = 25
+		print("col from getcol is ", col)
+	elif "Objects_in_JavaScript_" in hrtail:
+		col = 26
+		print("col from getcol is ", col)
+	else:
+		print("no column in canvas was found associated with this assignment!")
+		col = int(input("Enter the column to edit in CANVAS, refer to CanvasColumn.xlsx file in TA drive: "))
+		
+	return col + 3
+		
+	
+	
 
 while(getMore):
 	#### lets get a HR file and put it in a list
@@ -121,8 +161,9 @@ while(getMore):
 	numrows1 = len(Hr)          # 3 rows in your example
 	numcols1 = len(Hr[0])
 	print("Refer to CanvasColumn.xlsx file in TA drive")
-	col = int(input("Enter the column to edit in CANVAS: "))
-	col = col+3  ######## i think, double check the google doc 
+	#col = int(input("Enter the column to edit in CANVAS: "))
+	#col = col+3  ####### i think, double check the google doc 
+	col = getCol(HRtail)
 	#### Get user to define how many points this assignment is worth #############	
 	points = int(input("Enter how many points this assignment is worth in Canvas: "))
 	scaleDown = points/100
@@ -142,5 +183,3 @@ while(getMore):
 		newCanvas(newCa)
 		print("Thank you for using grader.py! \nTo provide feedback or report bugs, email Victor at tug86727@temple.edu")
 
-	
-	
