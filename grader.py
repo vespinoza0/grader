@@ -1,4 +1,4 @@
-import numpy as np
+#import numpy as np
 import csv
 import tkinter
 from tkinter import filedialog
@@ -8,6 +8,7 @@ import datetime
 getMore = True
 
 #### Get a single Canvas CSV file to update! #############
+print("Welcome to grader.py!!")
 print("Please Select Canvas CSV file")
 root = tkinter.Tk()
 root.withdraw()
@@ -112,34 +113,24 @@ def getCol(hrtail):
 	col = 1
 	if "Variables_in_JavaScript_" in hrtail:
 		col = 17
-		print("col from getcol is ", col)
 	elif "Data_Types_in_JavaScript_" in hrtail:
 		col = 18
-		print("col from getcol is ", col)
 	elif "Console_Input_and_Output_in_JavaScript_" in hrtail:
 		col = 19
-		print("col from getcol is ", col)
 	elif "Operators_in_JavaScript_" in hrtail:
 		col = 20
-		print("col from getcol is ", col)
 	elif "Conditional_Code_in_JavaScript_" in hrtail:
 		col = 21
-		print("col from getcol is ", col)
 	elif "Flow_Control_in_JavaScript_" in hrtail:
 		col = 22
-		print("col from getcol is ", col)
 	elif "Loops_in_JavaScript_" in hrtail:
 		col = 23
-		print("col from getcol is ", col)
 	elif "Debugging_in_JavaScript" in hrtail:
 		col = 24	
-		print("col from getcol is ", col)
 	elif "Functions_in_JavaScript_" in hrtail:
 		col = 25
-		print("col from getcol is ", col)
 	elif "Objects_in_JavaScript_" in hrtail:
 		col = 26
-		print("col from getcol is ", col)
 	else:
 		print("no column in canvas was found associated with this assignment!")
 		col = int(input("Enter the column to edit in CANVAS, refer to CanvasColumn.xlsx file in TA drive: "))
