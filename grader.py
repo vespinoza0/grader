@@ -47,10 +47,6 @@ def modHR(Hr):
 			#print('Was not able to find @ symbol',thing)  # not always necessary unless you want to see all the types of emails students used to register for HR
 			Hr[row].insert(18, loginID)
 			Hr[row][2] =loginID
-	
-	#with open("mod_HR_DELETE.csv", "w") as output:
-	#	writer = csv.writer(output, lineterminator='\n')
-	#	writer.writerows(Hr)
 		
 	return Hr
 	
