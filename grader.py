@@ -35,6 +35,8 @@ def modHR(Hr):
 			loginID = "tug91461@temple.edu"
 		if loginID == "jake.smedley@temple.edu":
 			loginID = "tug94736@temple.edu"
+		if loginID == "daniel.santoleri@temple.edu":
+			loginID = "tuh09185@temple.edu"
 		
 		if "@" in loginID:
 			a,b = loginID.split('@')
@@ -80,7 +82,7 @@ def newCanvas(nc):
 	
 ### this function updates a column in the canvas file 
 def updateCanvas(ca, hr, col, scale):
-	nomatches = 0
+	nomatches = int(0)
 	matches = 0 
 	noMatchz = []
 	for row in range(1, len(hr)): # go thru each submission in hackerRank
@@ -95,9 +97,9 @@ def updateCanvas(ca, hr, col, scale):
 				break
 			if rowz == len(ca)-2:
 				print("we could not match canvas id with submission associated with", tuID)
-				nomatches+=1
-				#noMatchz.append(hr[row][17])
 				noMatchz.append(hr[row][16])
+				#noMatchz[nomatches].insert(2,hr[row][3])
+				nomatches+=1
 	
 	if len(noMatchz)>0:
 		writeErrorLog(noMatchz)
