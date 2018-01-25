@@ -4,6 +4,7 @@ import tkinter
 from tkinter import filedialog
 import os
 import datetime
+import config
 
 getMore = True
 
@@ -29,14 +30,14 @@ def modHR(Hr):
 		loginID =Hr[row][2]
 		Hr[row].insert(17, loginID)
 		loginID = loginID.lower()
-		if loginID == "athena.chan@temple.edu":
-			loginID = "tug52798@temple.edu"
-		if loginID == "ivy.attenborough@temple.edu":
-			loginID = "tug91461@temple.edu"
-		if loginID == "jake.smedley@temple.edu":
-			loginID = "tug94736@temple.edu"
-		if loginID == "daniel.santoleri@temple.edu":
-			loginID = "tuh09185@temple.edu"
+		if loginID == config.loginID1:
+			loginID = config.login1
+		if loginID == config.loginID2:
+			loginID = config.login2
+		if loginID == config.loginID3:
+			loginID = config.login3
+		if loginID == config.loginID4:
+			loginID = config.login4
 		
 		if "@" in loginID:
 			a,b = loginID.split('@')
@@ -154,9 +155,13 @@ while(getMore):
 	#col = col+3  ####### i think, double check the google doc 
 	col = getCol(HRtail)
 	#### Get user to define how many points this assignment is worth #############	
-	points = int(input("Enter how many points this assignment is worth in Canvas: "))
-	scaleDown = points/100
+	#points = int(input("Enter how many points this assignment is worth in Canvas: "))
+	if col < 46:
+		points = 100
+	elif col >= 46 and col < 49:
+		points = 50
 	
+	scaleDown = points/100
 	newHR = modHR(Hr)           # edit the HackeRank file first ..... 
 	newCa = updateCanvas(Can,newHR,col,scaleDown)  #now update the canvas File!
 	subPercent= (len(newHR) -1)/total_students
