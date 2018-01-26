@@ -1,4 +1,3 @@
-#import numpy as np
 import csv
 import tkinter
 from tkinter import filedialog
@@ -97,7 +96,7 @@ def updateCanvas(ca, hr, col, scale):
 				matches+=1
 				break
 			if rowz == len(ca)-2:
-				print("we could not match canvas id with submission associated with", tuID)
+				#print("we could not match canvas id with submission associated with", tuID)
 				noMatchz.append(hr[row][16])
 				#noMatchz[nomatches].insert(2,hr[row][3])
 				nomatches+=1
@@ -130,11 +129,23 @@ def getCol(hrtail):
 		col = 25
 	elif "Objects_in_JavaScript_" in hrtail:
 		col = 26
+	elif "Code_Sprint_1_" in hrtail:
+		col = 1 
+	elif "Code_Sprint_2_" in hrtail:
+		col = 2 	
+	elif "Code_Sprint_3_" in hrtail:
+		col = 3 
+	elif "Code_Sprint_4_" in hrtail:
+		col = 4 
+	elif "Code_Sprint_5_" in hrtail:
+		col = 5 	
+	elif "Code_Sprint_6_" in hrtail:
+		col = 6 
 	else:
 		print("no column in canvas was found associated with this assignment!")
 		col = int(input("Enter the column to edit in CANVAS, refer to CanvasColumn.xlsx file in TA drive: "))
 		
-	return col + 3
+	return col+3
 		
 	
 	
@@ -150,7 +161,7 @@ while(getMore):
 	print("You have successfully imported HR file ", HRtail)	
 	numrows1 = len(Hr)          # 3 rows in your example
 	numcols1 = len(Hr[0])
-	print("Refer to CanvasColumn.xlsx file in TA drive")
+	#print("Refer to CanvasColumn.xlsx file in TA drive")
 	#col = int(input("Enter the column to edit in CANVAS: "))
 	#col = col+3  ####### i think, double check the google doc 
 	col = getCol(HRtail)
