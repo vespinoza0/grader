@@ -6,7 +6,8 @@ import datetime
 import config
 
 getMore = True
-
+myTAlist = config.TAlist
+globalMatches =0
 #### Get a single Canvas CSV file to update! #############
 print("Welcome to grader.py!!")
 print("Please Select Canvas CSV file")
@@ -37,6 +38,8 @@ def modHR(Hr):
 			loginID = config.login3
 		if loginID == config.loginID4:
 			loginID = config.login4
+		if loginID == config.loginID5:
+			loginID = config.login5
 		
 		if "@" in loginID:
 			a,b = loginID.split('@')
@@ -82,13 +85,16 @@ def newCanvas(nc):
 	
 ### this function updates a column in the canvas file 
 def updateCanvas(ca, hr, col, scale):
+	#myTAlist = config.TAlist
 	nomatches = int(0)
 	matches = 0 
 	noMatchz = []
 	for row in range(1, len(hr)): # go thru each submission in hackerRank
 		tuID = hr[row][2]
 		grade = float(hr[row][11])
-	
+		if tuID in myTAlist: # if it is a TA submission, skip for now
+			continue
+			
 		for rowz in range(2, len(ca)-1):  # match with their respective canvas slot
 			canvasID = ca[rowz][2]
 			if canvasID == tuID:
@@ -100,12 +106,11 @@ def updateCanvas(ca, hr, col, scale):
 				noMatchz.append(hr[row][16])
 				#noMatchz[nomatches].insert(2,hr[row][3])
 				nomatches+=1
-	
+	globalMatches = matches
 	if len(noMatchz)>0:
 		writeErrorLog(noMatchz)
-	
-	return ca
-	
+	return (matches,ca)
+			
 
 def getCol(hrtail):
 	col = 1
@@ -174,8 +179,10 @@ while(getMore):
 	
 	scaleDown = points/100
 	newHR = modHR(Hr)           # edit the HackeRank file first ..... 
-	newCa = updateCanvas(Can,newHR,col,scaleDown)  #now update the canvas File!
-	subPercent= (len(newHR) -1)/total_students
+	sb, newCa = updateCanvas(Can,newHR,col,scaleDown)  #now update the canvas File!
+	#subPercent= (len(newHR) -1)/total_students
+	#subPercent = globalMatches/total_students
+	subPercent = sb/total_students
 	subPercent = subPercent*100
 	print( "%.2f" % subPercent," percent of students have submitted ", HRtail)
 	print(len(newHR)-1," students out of ", total_students," have completed this assignment")
