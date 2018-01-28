@@ -40,35 +40,29 @@ def modHR(Hr):
 			loginID = config.login4
 		if loginID == config.loginID5:
 			loginID = config.login5
-		
+		if loginID == config.loginID6:
+			loginID = config.login6
+			
 		if "@" in loginID:
 			a,b = loginID.split('@')
 			email.append(a)
 			Hr[row].insert(18, a)
 			Hr[row][2] = a
-
 		else:
 			email.append(loginID)
-			#print('Was not able to find @ symbol',thing)  # not always necessary unless you want to see all the types of emails students used to register for HR
 			Hr[row].insert(18, loginID)
 			Hr[row][2] =loginID
-		
 	return Hr
 	
 	
 ### this  function creates ann error log with a time stamp
 def writeErrorLog(nomatch):
 	now = format(datetime.date.today())
-	
 	nows = str(now)
 	noMatchName = nows +'_unMatchedReport_' + HRtail
-	with open(noMatchName, "w") as output:
-		writer = csv.writer(output, lineterminator='\n')
-		for val in nomatch:
-			writer.writerow([val]) 
-	print("Error Log file created for " ,HRtail,"!")
-	print("Saved as ", noMatchName)
-	print("Exported report with submissions that were not matched to a student in canvas")
+	with open(noMatchName, 'w') as f:
+			[f.write('{0},{1}\n'.format(key, value)) for key, value in nomatch.items()]
+	print("Error Log file created for " ,HRtail,"! Saved as ", noMatchName)
 
 ### this  function creates a new updated canvas file with a time stamp
 def newCanvas(nc):
@@ -85,13 +79,17 @@ def newCanvas(nc):
 	
 ### this function updates a column in the canvas file 
 def updateCanvas(ca, hr, col, scale):
-	#myTAlist = config.TAlist
+	#
+	noMatchDict = {} # or dict()
+	noMatchDict['name'] = 'email'
 	nomatches = int(0)
 	matches = 0 
 	noMatchz = []
 	for row in range(1, len(hr)): # go thru each submission in hackerRank
 		tuID = hr[row][2]
 		grade = float(hr[row][11])
+		hrName = hr[row][3]
+		hrEmail = hr[row][16]
 		if tuID in myTAlist: # if it is a TA submission, skip for now
 			continue
 			
@@ -104,11 +102,12 @@ def updateCanvas(ca, hr, col, scale):
 			if rowz == len(ca)-2:
 				#print("we could not match canvas id with submission associated with", tuID)
 				noMatchz.append(hr[row][16])
-				#noMatchz[nomatches].insert(2,hr[row][3])
+				noMatchDict[hrName] = hrEmail
 				nomatches+=1
-	globalMatches = matches
-	if len(noMatchz)>0:
-		writeErrorLog(noMatchz)
+				
+	if len(noMatchDict)>1:
+		writeErrorLog(noMatchDict)				
+
 	return (matches,ca)
 			
 
@@ -166,22 +165,19 @@ while(getMore):
 	print("You have successfully imported HR file ", HRtail)	
 	numrows1 = len(Hr)          # 3 rows in your example
 	numcols1 = len(Hr[0])
-	#print("Refer to CanvasColumn.xlsx file in TA drive")
-	#col = int(input("Enter the column to edit in CANVAS: "))
+
 	#col = col+3  ####### i think, double check the google doc 
 	col = getCol(HRtail)
-	#### Get user to define how many points this assignment is worth #############	
-	#points = int(input("Enter how many points this assignment is worth in Canvas: "))
 	if col < 46:
 		points = 100
 	elif col >= 46 and col < 49:
 		points = 50
+	else:
+		points = int(input("Enter how many points this assignment is worth in Canvas: "))
 	
 	scaleDown = points/100
 	newHR = modHR(Hr)           # edit the HackeRank file first ..... 
 	sb, newCa = updateCanvas(Can,newHR,col,scaleDown)  #now update the canvas File!
-	#subPercent= (len(newHR) -1)/total_students
-	#subPercent = globalMatches/total_students
 	subPercent = sb/total_students
 	subPercent = subPercent*100
 	print( "%.2f" % subPercent," percent of students have submitted ", HRtail)
