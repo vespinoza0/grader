@@ -5,7 +5,6 @@ import os
 import datetime
 import config
 
-getMore = True
 myTAlist = config.TAlist
 globalMatches =0
 #### Get a single Canvas CSV file to update! #############
@@ -63,7 +62,7 @@ def writeErrorLog(nomatch):
 	noMatchName = nows +'_unMatchedReport_' + HRtail
 	with open(noMatchName, 'w') as f:
 			[f.write('{0},{1}\n'.format(key, value)) for key, value in nomatch.items()]
-	print("Error Log file created for " ,HRtail,"! Saved as ", noMatchName)
+	print("Error Log file created for" ,HRtail,"! Saved as ", noMatchName)
 
 ### this  function creates a new updated canvas file with a time stamp
 def newCanvas(nc):
