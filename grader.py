@@ -23,6 +23,7 @@ total_students = len(Can)-3
 print("for all ", total_students , " students! Hope this code works!")
 ###############################################################
 
+
 ### this function gets the unique TU emai and inserts in the second column of the HR list
 def modHR(Hr):
 	email = []
@@ -150,23 +151,21 @@ def getCol(hrtail):
 		col = int(input("Enter the column to edit in CANVAS, refer to CanvasColumn.xlsx file in TA drive: "))
 		
 	return col+3
-		
 	
+root = tkinter.Tk()
+root.withdraw()
+filez = filedialog.askopenfilenames(parent=root,title='SELECT ALL HACKERANK files')
+fileList = list(filez)
 	
-
-while(getMore):
-	#### lets get a HR file and put it in a list
-	print("Please Select HackerRank CSV file")  ####### 
-	HRfile = filedialog.askopenfilename(title = "Select HackerRank file",filetypes = (("CSV files","*.csv"),("all files","*.*")))  # get directory +filename.csv
-	head, HRtail = os.path.split(HRfile)
-	with open(HRfile) as csvDataFile:
+for i in range(0, len(fileList)):
+	with open(fileList[i]) as csvDataFile:
 		csvReader = csv.reader(csvDataFile)
-		Hr = list(csv.reader(csvDataFile))
+		Hr = list( csv.reader(csvDataFile))
+	
+	head, HRtail = os.path.split(fileList[i])
 	print("You have successfully imported HR file ", HRtail)	
 	numrows1 = len(Hr)          # 3 rows in your example
 	numcols1 = len(Hr[0])
-
-	#col = col+3  ####### i think, double check the google doc 
 	col = getCol(HRtail)
 	if col < 46:
 		points = 100
@@ -182,12 +181,13 @@ while(getMore):
 	subPercent = subPercent*100
 	print( "%.2f" % subPercent," percent of students have submitted ", HRtail)
 	print(len(newHR)-1," students out of ", total_students," have completed this assignment")
-	decide = int(input("Do you wish to continue updating? yes=1, no=0 "))
 
-	if decide == 1:
-		getMore = True
-	if decide == 0:
-		getMore = False
-		newCanvas(newCa)
-		print("Thank you for using grader.py! \nTo provide feedback or report bugs, email Victor at tug86727@temple.edu")
-
+newCanvas(newCa)
+print("Thank you for using grader.py! \nYou have just updated ", len(fileList),"assignments!")
+print("To provide feedback or report bugs, email Victor at tug86727@temple.edu")
+	
+	
+	
+	
+	
+	
