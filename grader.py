@@ -7,7 +7,11 @@ import config
 
 myTAlist = config.TAlist
 globalMatches =0
+avgDict = []
+b = ['Assignment','AvgScore','Sub_Rate', 'Sub_Avg']
+avgDict.append(b)
 #### Get a single Canvas CSV file to update! #############
+print("##################################################################################################################")
 print("Welcome to grader.py!!")
 print("Please Select Canvas CSV file")
 root = tkinter.Tk()
@@ -55,7 +59,7 @@ def modHR(Hr):
 	return Hr
 	
 	
-### this  function creates ann error log with a time stamp
+### this  function creates an error log with a time stamp
 def writeErrorLog(nomatch):
 	now = format(datetime.date.today())
 	nows = str(now)
@@ -64,6 +68,18 @@ def writeErrorLog(nomatch):
 			[f.write('{0},{1}\n'.format(key, value)) for key, value in nomatch.items()]
 	print("Error Log file created for" ,HRtail,"! Saved as ", noMatchName)
 
+def writeStats(dictio):
+	now = format(datetime.date.today())
+	nows = str(now)
+	dictName = nows+"_ProgressReport.csv"
+	#with open(dictName, 'w') as f:
+			#[f.write('{0},{1}\n'.format(key, value)) for key, value in dictio.items()]
+	with open(dictName, "w") as output:
+		writer = csv.writer(output, lineterminator='\n')
+		writer.writerows(dictio)
+	
+	
+	
 ### this  function creates a new updated canvas file with a time stamp
 def newCanvas(nc):
 	now = format(datetime.date.today())
@@ -72,7 +88,7 @@ def newCanvas(nc):
 	with open(newCanName, "w") as output:
 		writer = csv.writer(output, lineterminator='\n')
 		writer.writerows(nc)
-	print("#######################################################################")
+	print("##################################################################################################################")
 	print("Successfully exported ",newCanName)
 	print("and it is ready to be uploaded to canvas!")
 
@@ -84,10 +100,12 @@ def updateCanvas(ca, hr, col, scale):
 	noMatchDict['name'] = 'email'
 	nomatches = int(0)
 	matches = 0 
+	gradeSum = 0 
 	noMatchz = []
 	for row in range(1, len(hr)): # go thru each submission in hackerRank
 		tuID = hr[row][2]
 		grade = float(hr[row][11])
+		grade = grade*scale
 		hrName = hr[row][3]
 		hrEmail = hr[row][16]
 		if tuID in myTAlist: # if it is a TA submission, skip for now
@@ -96,7 +114,8 @@ def updateCanvas(ca, hr, col, scale):
 		for rowz in range(2, len(ca)-1):  # match with their respective canvas slot
 			canvasID = ca[rowz][2]
 			if canvasID == tuID:
-				ca[rowz][col] = grade*scale
+				ca[rowz][col] = grade
+				gradeSum += grade
 				matches+=1
 				break
 			if rowz == len(ca)-2:
@@ -106,9 +125,13 @@ def updateCanvas(ca, hr, col, scale):
 				nomatches+=1
 				
 	if len(noMatchDict)>1:
-		writeErrorLog(noMatchDict)				
-
-	return (matches,ca)
+		writeErrorLog(noMatchDict)		
+		
+	hrMean = gradeSum/matches
+	realAvg = gradeSum/total_students
+	subRate = (matches/total_students)*100
+	avgDict.append([ca[0][col],realAvg, subRate, hrMean])
+	return(matches,ca)
 			
 
 def getCol(hrtail):
@@ -159,7 +182,7 @@ fileList = list(filez)
 for i in range(0, len(fileList)):
 	with open(fileList[i]) as csvDataFile:
 		csvReader = csv.reader(csvDataFile)
-		Hr = list( csv.reader(csvDataFile))
+		Hr = list(csv.reader(csvDataFile))
 	
 	head, HRtail = os.path.split(fileList[i])
 	print("You have successfully imported HR file ", HRtail)	
@@ -177,11 +200,10 @@ for i in range(0, len(fileList)):
 	newHR = modHR(Hr)           # edit the HackeRank file first ..... 
 	sb, newCa = updateCanvas(Can,newHR,col,scaleDown)  #now update the canvas File!
 	subPercent = sb/total_students
-	subPercent = subPercent*100
-	print( "%.2f" % subPercent," percent of students have submitted ", HRtail)
-	print(len(newHR)-1," students out of ", total_students," have completed this assignment")
+	
 
 newCanvas(newCa)
+writeStats(avgDict)
 print("Thank you for using grader.py! \nYou have just updated ", len(fileList),"assignments!")
 print("To provide feedback or report bugs, email Victor at tug86727@temple.edu")
 	
