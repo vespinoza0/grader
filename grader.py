@@ -6,7 +6,6 @@ import datetime
 import config
 
 myTAlist = config.TAlist
-globalMatches =0
 avgDict = []
 b = ['Assignment','AvgScore','Sub_Rate', 'Sub_Avg']
 avgDict.append(b)
@@ -186,7 +185,7 @@ for i in range(0, len(fileList)):
 	
 	head, HRtail = os.path.split(fileList[i])
 	print("You have successfully imported HR file ", HRtail)	
-	numrows1 = len(Hr)          # 3 rows in your example
+	numrows1 = len(Hr)          
 	numcols1 = len(Hr[0])
 	col = getCol(HRtail)
 	if col < 46:
@@ -204,7 +203,7 @@ for i in range(0, len(fileList)):
 
 newCanvas(newCa)
 writeStats(avgDict)
-print("Thank you for using grader.py! \nYou have just updated ", len(fileList),"assignments!")
+print("You have just updated ", len(fileList),"assignments!\nThank you for using grader.py!")
 print("To provide feedback or report bugs, email Victor at tug86727@temple.edu")
 	
 	
