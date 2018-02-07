@@ -22,6 +22,7 @@ with open(Ca) as csvDataFile:
 	csvReader = csv.reader(csvDataFile)
 	Can = list( csv.reader(csvDataFile))
 total_students = len(Can)-3
+Canheader = Can[0]
 print("for all ", total_students , " students! Hope this code works!")
 ###############################################################
 
@@ -135,43 +136,18 @@ def updateCanvas(ca, hr, col, scale):
 
 def getCol(hrtail):
 	col = 1
-	if "Variables_in_JavaScript_" in hrtail:
-		col = 17
-	elif "Data_Types_in_JavaScript_" in hrtail:
-		col = 18
-	elif "Console_Input_and_Output_in_JavaScript_" in hrtail:
-		col = 19
-	elif "Operators_in_JavaScript_" in hrtail:
-		col = 20
-	elif "Conditional_Code_in_JavaScript_" in hrtail:
-		col = 21
-	elif "Flow_Control_in_JavaScript_" in hrtail:
-		col = 22
-	elif "Loops_in_JavaScript_" in hrtail:
-		col = 23
-	elif "Debugging_in_JavaScript" in hrtail:
-		col = 24	
-	elif "Functions_in_JavaScript_" in hrtail:
-		col = 25
-	elif "Objects_in_JavaScript_" in hrtail:
-		col = 26
-	elif "Code_Sprint_1_" in hrtail:
-		col = 1 
-	elif "Code_Sprint_2_" in hrtail:
-		col = 2 	
-	elif "Code_Sprint_3_" in hrtail:
-		col = 3 
-	elif "Code_Sprint_4_" in hrtail:
-		col = 4 
-	elif "Code_Sprint_5_" in hrtail:
-		col = 5 	
-	elif "Code_Sprint_6_" in hrtail:
-		col = 6 
-	else:
-		print("no column in canvas was found associated with this assignment!")
-		col = int(input("Enter the column to edit in CANVAS, refer to CanvasColumn.xlsx file in TA drive: "))
-		
-	return col+3
+	HRname = hrtail.lower()
+	print(HRname)
+	for i in range(0,len(Canheader)):
+		thing = Canheader[i]
+		thing = thing.lower()
+		canName = thing.split()
+		if canName[0] in HRname and canName[1] in HRname and canName[2] in HRname:
+			return i
+		if i == len(Canheader)-1:
+			print("no column in canvas was found associated with this assignment!")
+			col = int(input("Enter the column to edit in CANVAS, refer to CanvasColumn.xlsx file in TA drive: "))
+			return col+3 
 	
 root = tkinter.Tk()
 root.withdraw()
