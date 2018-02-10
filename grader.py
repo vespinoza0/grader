@@ -126,8 +126,10 @@ def updateCanvas(ca, hr, col, scale):
 				
 	if len(noMatchDict)>1:
 		writeErrorLog(noMatchDict)		
-		
+	print('-------------------------------------------------------------------------------------------------------------')
+	tt = len(hr)-1
 	hrMean = gradeSum/matches
+	#hrMean = gradeSum/tt
 	realAvg = gradeSum/total_students
 	subRate = (matches/total_students)*100
 	avgDict.append([ca[0][col],realAvg, subRate, hrMean])
@@ -137,12 +139,14 @@ def updateCanvas(ca, hr, col, scale):
 def getCol(hrtail):
 	col = 1
 	HRname = hrtail.lower()
-	print(HRname)
+	h = HRname.split('_')
+	hh = h[0:len(h)-2]
 	for i in range(0,len(Canheader)):
 		thing = Canheader[i]
 		thing = thing.lower()
 		canName = thing.split()
-		if canName[0] in HRname and canName[1] in HRname and canName[2] in HRname:
+		cName = canName[0:len(h)-2]
+		if cName==hh:
 			return i
 		if i == len(Canheader)-1:
 			print("no column in canvas was found associated with this assignment!")
