@@ -72,8 +72,6 @@ def writeStats(dictio):
 	now = format(datetime.date.today())
 	nows = str(now)
 	dictName = nows+"_ProgressReport.csv"
-	#with open(dictName, 'w') as f:
-			#[f.write('{0},{1}\n'.format(key, value)) for key, value in dictio.items()]
 	with open(dictName, "w") as output:
 		writer = csv.writer(output, lineterminator='\n')
 		writer.writerows(dictio)
@@ -105,13 +103,15 @@ def updateCanvas(ca, hr, col, scale):
 	for row in range(1, len(hr)): # go thru each submission in hackerRank
 		tuID = hr[row][2]
 		grade = float(hr[row][11])
+		if grade == 0:
+			#print("zero submission!!!")
+			continue
 		grade = grade*scale
 		hrName = hr[row][3]
 		hrEmail = hr[row][16]
 		if tuID in myTAlist: # if it is a TA submission, skip for now
 			continue
-			
-		for rowz in range(2, len(ca)-1):  # match with their respective canvas slot
+		for rowz in range(2, len(ca)-1):  # search canvas match with their respective canvas slot
 			canvasID = ca[rowz][2]
 			if canvasID == tuID:
 				ca[rowz][col] = grade
@@ -129,12 +129,10 @@ def updateCanvas(ca, hr, col, scale):
 	print('-------------------------------------------------------------------------------------------------------------')
 	tt = len(hr)-1
 	hrMean = gradeSum/matches
-	#hrMean = gradeSum/tt
 	realAvg = gradeSum/total_students
 	subRate = (matches/total_students)*100
 	avgDict.append([ca[0][col],realAvg, subRate, hrMean])
-	return(matches,ca)
-			
+	return(matches,ca)	
 
 def getCol(hrtail):
 	col = 1
@@ -147,6 +145,9 @@ def getCol(hrtail):
 		canName = thing.split()
 		cName = canName[0:len(h)-2]
 		if cName==hh:
+			# print("header #", i)
+			# print(cName)
+			# print("found it!")
 			return i
 		if i == len(Canheader)-1:
 			print("no column in canvas was found associated with this assignment!")
@@ -155,7 +156,7 @@ def getCol(hrtail):
 	
 root = tkinter.Tk()
 root.withdraw()
-filez = filedialog.askopenfilenames(parent=root,title='SELECT ALL HACKERANK files')
+filez = filedialog.askopenfilenames(parent=root,title='SELECT ALL HACKERANK FILES')
 fileList = list(filez)
 	
 for i in range(0, len(fileList)):
