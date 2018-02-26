@@ -9,6 +9,8 @@ myTAlist = config.TAlist
 avgDict = []
 b = ['Assignment','AvgScore','Sub_Rate', 'Sub_Avg']
 avgDict.append(b)
+JScolumn = 0
+pyColumn = 0
 #### Get a single Canvas CSV file to update! #############
 print("##################################################################################################################")
 print("Welcome to grader.py!!")
@@ -24,6 +26,19 @@ with open(Ca) as csvDataFile:
 total_students = len(Can)-3
 Canheader = Can[0]
 print("for all ", total_students , " students! Hope this code works!")
+
+for i in range(0,len(Canheader)):
+
+	thing = Canheader[i]
+	thing = thing.lower()
+	canName = thing.split()
+	#cName = canName[0:len(h)-2]
+	if "variables" in canName and "javascript" in canName:
+		print("variables in javascript in column :", i)
+		JScolumn = i
+	if "variables" in canName and "python" in canName:
+		pyColumn = i
+
 ###############################################################
 
 
@@ -91,9 +106,66 @@ def newCanvas(nc):
 	print("and it is ready to be uploaded to canvas!")
 
 	
+def checkpoint(Can,jscol,pycol):
+	checkList = []
+	b = ['student','JS1','JS2','JS3', 'Py1', 'Py2']
+	checkList.append(b)
+	for i in range(2,len(Can)-1):
+		student = Can[i][2]
+		checks = 0
+		for j in range(jscol,jscol+10):
+			score = Can[i][j]
+			if score:  
+				score1 = float(score)
+				if score1 >=70:
+					checks +=1
+			if not score: # if there is no element
+				score = 0
+				Can[i][j] = score
+		#print("this student has this many checks: ", checks)
+		templist = [student, '0', '0', '0', '0', '0']
+		if checks >=3 and checks <6:
+			templist[1] = '1' 
+		elif checks >=6 and checks <10:
+			templist[1] = '1'
+			templist[2] = '1'
+		
+		elif checks == 10:
+			templist[1] = '1'
+			templist[2] = '1'
+			templist[3] = '1'
+	
+		checksp = 0
+		for k in range(pycol,pycol+10):
+			score = Can[i][k]
+			if score:
+				score1 = float(score)
+				if score1 >=70:
+					checksp +=1
+				if not score:
+					score = 0
+					Can[i][k] = score
+				
+	
+		if checksp >= 5 and checksp < 10:
+			templist[4] = '1'
+		
+		elif checksp == 10:
+			templist[4] = '1'
+			templist[5] = '1'
+
+		checkList.append(templist)
+	now = format(datetime.date.today())
+	nows = str(now) 
+	with open(nows+"_projectEligibility.csv", "w") as output:
+		writer = csv.writer(output, lineterminator='\n')
+		writer.writerows(checkList)
+	
+	
+	
 ### this function updates a column in the canvas file 
 def updateCanvas(ca, hr, col, scale):
-	#
+
 	noMatchDict = {} # or dict()
 	noMatchDict['name'] = 'email'
 	nomatches = int(0)
@@ -139,11 +211,18 @@ def getCol(hrtail):
 	HRname = hrtail.lower()
 	h = HRname.split('_')
 	hh = h[0:len(h)-2]
+
 	for i in range(0,len(Canheader)):
 		thing = Canheader[i]
 		thing = thing.lower()
 		canName = thing.split()
 		cName = canName[0:len(h)-2]
+		# if "variables" in cName and "javascript" in cName:
+			# print("variables in javascript in column :", i)
+			# JScolumn = i
+		# if "data" in cName and "python" in cName:
+			# pyColumn = i
+			# print("data types in python in column :", i)
 		if cName==hh:
 			# print("header #", i)
 			# print(cName)
@@ -183,6 +262,7 @@ for i in range(0, len(fileList)):
 	
 
 newCanvas(newCa)
+checkpoint(newCa,JScolumn,pyColumn)
 writeStats(avgDict)
 print("You have just updated ", len(fileList),"assignments!\nThank you for using grader.py!")
 print("To provide feedback or report bugs, email Victor at tug86727@temple.edu")
