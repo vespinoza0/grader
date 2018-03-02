@@ -34,7 +34,6 @@ for i in range(0,len(Canheader)):
 	canName = thing.split()
 	#cName = canName[0:len(h)-2]
 	if "variables" in canName and "javascript" in canName:
-		print("variables in javascript in column :", i)
 		JScolumn = i
 	if "variables" in canName and "python" in canName:
 		pyColumn = i
@@ -47,25 +46,25 @@ def modHR(Hr):
 	email = []
 	present = datetime.datetime.now()
 	deadline = datetime.datetime(2018,2,21)
-
 	
 	for row in range(1, len(Hr)):
 		loginID =Hr[row][2]
-		print(Hr[row][1])
 		d = Hr[row][1].split('/')
 		a = int(d[0])
 		b = int(d[1])
 		c = int(d[2])
 		subdate = datetime.datetime(a,b,c)
 		# update scoring system changed on 2/21/18
-		if subdate > deadline: 
-
-		elif subdate <= deadline:
+		#if subdate > deadline: 
+			#lolwut
+		if subdate <= deadline:
 			grade = float(Hr[row][11])
 			if grade == 10:
 				Hr[row][11] = 30
 			elif grade == 40:
 				Hr[row][11] = 70
+				
+		
 		
 		Hr[row].insert(17, loginID)
 		loginID = loginID.lower()
@@ -185,18 +184,18 @@ def checkpoint(Can,jscol,pycol):
 	
 ### this function updates a column in the canvas file 
 def updateCanvas(ca, hr, col, scale):
-
-	noMatchDict = {} # or dict()
+	noMatchDict = {} # empty dict()
 	noMatchDict['name'] = 'email'
 	nomatches = int(0)
 	matches = 0 
 	gradeSum = 0 
+	oldgradeSum = 0
+	hrGradeSum = 0 
 	noMatchz = []
 	for row in range(1, len(hr)): # go thru each submission in hackerRank
 		tuID = hr[row][2]
 		grade = float(hr[row][11])
 		if grade == 0:
-			#print("zero submission!!!")
 			continue
 		grade = grade*scale
 		hrName = hr[row][3]
@@ -206,9 +205,14 @@ def updateCanvas(ca, hr, col, scale):
 		for rowz in range(2, len(ca)-1):  # search canvas match with their respective canvas slot
 			canvasID = ca[rowz][2]
 			if canvasID == tuID:
-				ca[rowz][col] = grade
-				gradeSum += grade
 				matches+=1
+				hrGradeSum += grade
+				oldgrade = float(ca[rowz][col])
+				oldgradeSum += oldgrade
+				if oldgrade < grade:
+					#print("old grade is ", oldgrade)
+					#print("new grade is ", grade)
+					ca[rowz][col] = grade
 				break
 			if rowz == len(ca)-2:
 				#print("we could not match canvas id with submission associated with", tuID)
@@ -216,11 +220,15 @@ def updateCanvas(ca, hr, col, scale):
 				noMatchDict[hrName] = hrEmail
 				nomatches+=1
 				
+	for i in range(2,len(ca)-1):
+		grade = float(ca[i][col])
+		gradeSum += grade
+				
 	if len(noMatchDict)>1:
 		writeErrorLog(noMatchDict)		
-	print('-------------------------------------------------------------------------------------------------------------')
+	print('---------------------------------------------------------------------------------------------------------------')
 	tt = len(hr)-1
-	hrMean = gradeSum/matches
+	hrMean = hrGradeSum/matches
 	realAvg = gradeSum/total_students
 	subRate = (matches/total_students)*100
 	avgDict.append([ca[0][col],realAvg, subRate, hrMean])
