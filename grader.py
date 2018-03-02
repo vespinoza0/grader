@@ -45,8 +45,28 @@ for i in range(0,len(Canheader)):
 ### this function gets the unique TU emai and inserts in the second column of the HR list
 def modHR(Hr):
 	email = []
+	present = datetime.datetime.now()
+	deadline = datetime.datetime(2018,2,21)
+
+	
 	for row in range(1, len(Hr)):
 		loginID =Hr[row][2]
+		print(Hr[row][1])
+		d = Hr[row][1].split('/')
+		a = int(d[0])
+		b = int(d[1])
+		c = int(d[2])
+		subdate = datetime.datetime(a,b,c)
+		# update scoring system changed on 2/21/18
+		if subdate > deadline: 
+
+		elif subdate <= deadline:
+			grade = float(Hr[row][11])
+			if grade == 10:
+				Hr[row][11] = 30
+			elif grade == 40:
+				Hr[row][11] = 70
+		
 		Hr[row].insert(17, loginID)
 		loginID = loginID.lower()
 		if loginID == config.loginID1:
