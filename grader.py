@@ -50,10 +50,10 @@ def modHR(Hr):
 	for row in range(1, len(Hr)):
 		loginID =Hr[row][2]
 		d = Hr[row][1].split('/')
-		a = int(d[0])
-		b = int(d[1])
-		c = int(d[2])
-		subdate = datetime.datetime(a,b,c)
+		month = int(d[0])
+		day = int(d[1])
+		year = int(d[2])
+		subdate = datetime.datetime(year,month,day)
 		# update scoring system changed on 2/21/18
 		#if subdate > deadline: 
 			#lolwut
@@ -213,6 +213,7 @@ def updateCanvas(ca, hr, col, scale):
 					#print("old grade is ", oldgrade)
 					#print("new grade is ", grade)
 					ca[rowz][col] = grade
+					
 				break
 			if rowz == len(ca)-2:
 				#print("we could not match canvas id with submission associated with", tuID)
