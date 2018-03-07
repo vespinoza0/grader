@@ -50,9 +50,9 @@ def modHR(Hr):
 	for row in range(1, len(Hr)):
 		loginID =Hr[row][2]
 		d = Hr[row][1].split('/')
-		month = int(d[0])
-		day = int(d[1])
-		year = int(d[2])
+		year = int(d[0])
+		month = int(d[1])
+		day = int(d[2])
 		subdate = datetime.datetime(year,month,day)
 		# update scoring system changed on 2/21/18
 		#if subdate > deadline: 
