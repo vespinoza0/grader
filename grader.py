@@ -63,6 +63,9 @@ def modHR(Hr):
 				Hr[row][11] = 30
 			elif grade == 40:
 				Hr[row][11] = 70
+			elif grade > 100
+				Hr[row][11] = 100
+				
 				
 		
 		
