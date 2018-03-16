@@ -55,15 +55,14 @@ def modHR(Hr):
 		day = int(d[2])
 		subdate = datetime.datetime(year,month,day)
 		# update scoring system changed on 2/21/18
-		#if subdate > deadline: 
-			#lolwut
+
 		if subdate <= deadline:
 			grade = float(Hr[row][11])
 			if grade == 10:
 				Hr[row][11] = 30
 			elif grade == 40:
 				Hr[row][11] = 70
-			elif grade > 100
+			elif grade > 100:
 				Hr[row][11] = 100
 				
 				
@@ -213,8 +212,6 @@ def updateCanvas(ca, hr, col, scale):
 				oldgrade = float(ca[rowz][col])
 				oldgradeSum += oldgrade
 				if oldgrade < grade:
-					#print("old grade is ", oldgrade)
-					#print("new grade is ", grade)
 					ca[rowz][col] = grade
 					
 				break
