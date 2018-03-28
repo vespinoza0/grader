@@ -46,13 +46,19 @@ def modHR(Hr):
 	email = []
 	present = datetime.datetime.now()
 	deadline = datetime.datetime(2018,2,21)
+	header = Hr[0]
+	loginIDindex = header.index('Login ID')
+	#print("found login ID index", loginIDindex )
 	
 	for row in range(1, len(Hr)):
-		loginID =Hr[row][2]
-		d = Hr[row][1].split('/')
+		loginID =Hr[row][loginIDindex]
+		d = Hr[row][3].split('/')
+		print(Hr[row][3])
 		year = int(d[0])
 		month = int(d[1])
 		day = int(d[2])
+		
+		
 		subdate = datetime.datetime(year,month,day)
 		# update scoring system changed on 2/21/18
 
@@ -196,12 +202,14 @@ def updateCanvas(ca, hr, col, scale):
 	noMatchz = []
 	for row in range(1, len(hr)): # go thru each submission in hackerRank
 		tuID = hr[row][2]
-		grade = float(hr[row][11])
+		grade = float(hr[row][11])  # imported HR grade
 		if grade == 0:
 			continue
 		grade = grade*scale
-		hrName = hr[row][3]
-		hrEmail = hr[row][16]
+		hrName = hr[row][2]
+		print("hrName",hrName)
+		hrEmail = hr[row][4]
+		print("hrEmail",hrEmail)
 		if tuID in myTAlist: # if it is a TA submission, skip for now
 			continue
 		for rowz in range(2, len(ca)-1):  # search canvas match with their respective canvas slot
@@ -209,15 +217,15 @@ def updateCanvas(ca, hr, col, scale):
 			if canvasID == tuID:
 				matches+=1
 				hrGradeSum += grade
-				oldgrade = float(ca[rowz][col])
+				oldgrade = float(ca[rowz][col]) # current canvas grade
 				oldgradeSum += oldgrade
 				if oldgrade < grade:
-					ca[rowz][col] = grade
+					ca[rowz][col] = grade  # update canvas list to higher grade
 					
 				break
 			if rowz == len(ca)-2:
 				#print("we could not match canvas id with submission associated with", tuID)
-				noMatchz.append(hr[row][16])
+				noMatchz.append(hr[row][16+2])
 				noMatchDict[hrName] = hrEmail
 				nomatches+=1
 				
@@ -286,6 +294,10 @@ for i in range(0, len(fileList)):
 	
 	scaleDown = points/100
 	newHR = modHR(Hr)           # edit the HackeRank file first ..... 
+	with open('dookie.csv', "w") as output:
+		writer = csv.writer(output, lineterminator='\n')
+		writer.writerows(newHR)
+		
 	sb, newCa = updateCanvas(Can,newHR,col,scaleDown)  #now update the canvas File!
 	subPercent = sb/total_students
 	
