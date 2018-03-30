@@ -93,11 +93,11 @@ def modHR(Hr):
 			a,b = loginID.split('@')
 			email.append(a)
 			Hr[row].insert(18, a)
-			Hr[row][2] = a
+			Hr[row][loginIDindex] = a
 		else:
 			email.append(loginID)
 			Hr[row].insert(18, loginID)
-			Hr[row][2] =loginID
+			Hr[row][loginIDindex] =loginID
 	return Hr
 	
 	
@@ -200,15 +200,17 @@ def updateCanvas(ca, hr, col, scale):
 	oldgradeSum = 0
 	hrGradeSum = 0 
 	noMatchz = []
+	header = hr[0]
+	loginIDindex = header.index('Login ID')
 	for row in range(1, len(hr)): # go thru each submission in hackerRank
-		tuID = hr[row][2]
+		tuID = hr[row][loginIDindex]
 		grade = float(hr[row][11])  # imported HR grade
 		if grade == 0:
 			continue
 		grade = grade*scale
 		hrName = hr[row][2]
 		print("hrName",hrName)
-		hrEmail = hr[row][4]
+		hrEmail = hr[row][17]
 		print("hrEmail",hrEmail)
 		if tuID in myTAlist: # if it is a TA submission, skip for now
 			continue
@@ -225,7 +227,7 @@ def updateCanvas(ca, hr, col, scale):
 				break
 			if rowz == len(ca)-2:
 				#print("we could not match canvas id with submission associated with", tuID)
-				noMatchz.append(hr[row][16+2])
+				noMatchz.append(hr[row][16+1])
 				noMatchDict[hrName] = hrEmail
 				nomatches+=1
 				
@@ -294,9 +296,9 @@ for i in range(0, len(fileList)):
 	
 	scaleDown = points/100
 	newHR = modHR(Hr)           # edit the HackeRank file first ..... 
-	with open('dookie.csv', "w") as output:
-		writer = csv.writer(output, lineterminator='\n')
-		writer.writerows(newHR)
+	# with open('dookie.csv', "w") as output:
+		# writer = csv.writer(output, lineterminator='\n')
+		# writer.writerows(newHR)
 		
 	sb, newCa = updateCanvas(Can,newHR,col,scaleDown)  #now update the canvas File!
 	subPercent = sb/total_students
@@ -307,9 +309,4 @@ checkpoint(newCa,JScolumn,pyColumn)
 writeStats(avgDict)
 print("You have just updated ", len(fileList),"assignments!\nThank you for using grader.py!")
 print("To provide feedback or report bugs, email Victor at tug86727@temple.edu")
-	
-	
-	
-	
-	
-	
+
