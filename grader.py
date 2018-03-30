@@ -48,12 +48,12 @@ def modHR(Hr):
 	deadline = datetime.datetime(2018,2,21)
 	header = Hr[0]
 	loginIDindex = header.index('Login ID')
+	totalScoreColumn = header.index('Total score')
 	#print("found login ID index", loginIDindex )
 	
 	for row in range(1, len(Hr)):
 		loginID =Hr[row][loginIDindex]
 		d = Hr[row][3].split('/')
-		print(Hr[row][3])
 		year = int(d[0])
 		month = int(d[1])
 		day = int(d[2])
@@ -63,7 +63,7 @@ def modHR(Hr):
 		# update scoring system changed on 2/21/18
 
 		if subdate <= deadline:
-			grade = float(Hr[row][11])
+			grade = float(Hr[row][totalScoreColumn])
 			if grade == 10:
 				Hr[row][11] = 30
 			elif grade == 40:
@@ -202,16 +202,18 @@ def updateCanvas(ca, hr, col, scale):
 	noMatchz = []
 	header = hr[0]
 	loginIDindex = header.index('Login ID')
+	totalScoreColumn = header.index('Total score')
+	print("total score index", totalScoreColumn)
 	for row in range(1, len(hr)): # go thru each submission in hackerRank
 		tuID = hr[row][loginIDindex]
-		grade = float(hr[row][11])  # imported HR grade
+		grade = float(hr[row][totalScoreColumn])  # imported HR grade
 		if grade == 0:
 			continue
 		grade = grade*scale
 		hrName = hr[row][2]
-		print("hrName",hrName)
+		#print("hrName",hrName)
 		hrEmail = hr[row][17]
-		print("hrEmail",hrEmail)
+		#print("hrEmail",hrEmail)
 		if tuID in myTAlist: # if it is a TA submission, skip for now
 			continue
 		for rowz in range(2, len(ca)-1):  # search canvas match with their respective canvas slot
@@ -287,6 +289,7 @@ for i in range(0, len(fileList)):
 	numrows1 = len(Hr)          
 	numcols1 = len(Hr[0])
 	col = getCol(HRtail)
+	print("this is the respective column : ", col)
 	if col < 46:
 		points = 100
 	elif col >= 46 and col < 49:
