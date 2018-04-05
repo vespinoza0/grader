@@ -134,36 +134,47 @@ def newCanvas(nc):
 
 	
 def checkpoint(Can,jscol,pycol):
+	header = Can[0]
+	CScol = header.index('Core Skills HackerRank (68007)')
+	ILP1col = header.index('Individual Learning Path Assignment 1: IDE and GUI (121770)')
+	ILP2col = header.index('Individual Learning Path Assignment 2: Core Skills (68009)')
+	# print(CScol)
+	# print(ILP1col)
+	# print(ILP2col)
 	checkList = []
-	b = ['student','JS1','JS2','JS3', 'Py1', 'Py2']
+	#b = ['student','JS1','JS2','JS3', 'Py1', 'Py2']  
+	b = ['student','email','JS1','JS2','JS3', 'Py1', 'Py2', 'CS','ILP1','ILP2','Eligibility']
 	checkList.append(b)
 	for i in range(2,len(Can)-1):
-		student = Can[i][2]
+		student = Can[i][0]
+		email = Can[i][2]+ "@temple.edu"
 		checks = 0
-		for j in range(jscol,jscol+10):
+		#print(email)
+		for j in range(jscol,jscol+10):  #loop thru JS 10 columns
 			score = Can[i][j]
 			if score:  
 				score1 = float(score)
 				if score1 >=70:
 					checks +=1
-			if not score: # if there is no element
+			if not score:         #if there is no element
 				score = 0
 				Can[i][j] = score
-		#print("this student has this many checks: ", checks)
-		templist = [student, '0', '0', '0', '0', '0']
-		if checks >=3 and checks <6:
-			templist[1] = '1' 
-		elif checks >=6 and checks <10:
-			templist[1] = '1'
-			templist[2] = '1'
 		
-		elif checks == 10:
-			templist[1] = '1'
+		#templist = [student, '0', '0', '0', '0', '0']  # 
+		templist = [student,email,'0', '0', '0', '0', '0','0','0','0','0']
+		if checks >=3 and checks <6:
+			templist[2] = '1' 
+		elif checks >=6 and checks <10:
 			templist[2] = '1'
 			templist[3] = '1'
+		
+		elif checks == 10:
+			templist[2] = '1'
+			templist[3] = '1'
+			templist[4] = '1'
 	
 		checksp = 0
-		for k in range(pycol,pycol+10):
+		for k in range(pycol,pycol+10):  #loop thru python 10 columns
 			score = Can[i][k]
 			if score:
 				score1 = float(score)
@@ -172,15 +183,33 @@ def checkpoint(Can,jscol,pycol):
 				if not score:
 					score = 0
 					Can[i][k] = score
-				
 	
 		if checksp >= 5 and checksp < 10:
-			templist[4] = '1'
-		
-		elif checksp == 10:
-			templist[4] = '1'
 			templist[5] = '1'
-
+		elif checksp == 10:
+			templist[5] = '1'
+			templist[6] = '1'
+		
+		#print("CoreSkills score",Can[i][CScol])
+		if float(Can[i][CScol])>=70:
+			templist[7] = '1'
+		#print("ILP1 score",Can[i][ILP1col])
+		if float(Can[i][ILP1col])>=70:
+			templist[8] = '1'
+		#print("ILP2 score",Can[i][ILP2col])
+		if float(Can[i][ILP2col])>=70:
+			templist[9] = '1'
+		ss = templist[2:]
+		ssSum= 0
+		for k in range(len(ss)):
+			aaa = int(ss[k])
+			ssSum = ssSum+aaa
+		if ssSum ==8:
+			templist[10] = '1'
+		
+		
+		#print(templist)
+		#print(ss, "sum is",ssSum)
 		checkList.append(templist)
 	now = format(datetime.date.today())
 	nows = str(now) 
@@ -202,30 +231,31 @@ def updateCanvas(ca, hr, col, scale):
 	noMatchz = []
 	header = hr[0]
 	loginIDindex = header.index('Login ID')
-	totalScoreColumn = header.index('Total score')
-	print("total score index", totalScoreColumn)
+	#ScoreColumn = header.index('Percentage score')
+	print("Percentage score index", ScoreColumn)
 	for row in range(1, len(hr)): # go thru each submission in hackerRank
 		tuID = hr[row][loginIDindex]
-		grade = float(hr[row][totalScoreColumn])  # imported HR grade
+		grade = float(hr[row][ScoreColumn])  # imported HR grade
 		if grade == 0:
 			continue
 		grade = grade*scale
 		hrName = hr[row][2]
-		#print("hrName",hrName)
 		hrEmail = hr[row][17]
-		#print("hrEmail",hrEmail)
+
 		if tuID in myTAlist: # if it is a TA submission, skip for now
 			continue
 		for rowz in range(2, len(ca)-1):  # search canvas match with their respective canvas slot
 			canvasID = ca[rowz][2]
-			if canvasID == tuID:
-				matches+=1
+			if canvasID == tuID:			# if we match tug##### 
+				matches+=1					# increment match counter
 				hrGradeSum += grade
 				oldgrade = float(ca[rowz][col]) # current canvas grade
-				oldgradeSum += oldgrade
-				if oldgrade < grade:
-					ca[rowz][col] = grade  # update canvas list to higher grade
-					
+				
+				if oldgrade < grade:			# if oldgrade is less than grade from HR
+					ca[rowz][col] = grade  		# update canvas list to higher grade
+					oldgradeSum += grade        # add new higher grade
+				else:
+					oldgradeSum += oldgrade		# else add old original grade
 				break
 			if rowz == len(ca)-2:
 				#print("we could not match canvas id with submission associated with", tuID)
@@ -299,9 +329,6 @@ for i in range(0, len(fileList)):
 	
 	scaleDown = points/100
 	newHR = modHR(Hr)           # edit the HackeRank file first ..... 
-	# with open('dookie.csv', "w") as output:
-		# writer = csv.writer(output, lineterminator='\n')
-		# writer.writerows(newHR)
 		
 	sb, newCa = updateCanvas(Can,newHR,col,scaleDown)  #now update the canvas File!
 	subPercent = sb/total_students
