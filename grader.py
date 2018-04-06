@@ -49,6 +49,8 @@ def modHR(Hr):
 	header = Hr[0]
 	loginIDindex = header.index('Login ID')
 	totalScoreColumn = header.index('Total score')
+	percentColumn = header.index('Percentage score')
+	maxColumn = header.index('Max score')
 	#print("found login ID index", loginIDindex )
 	
 	for row in range(1, len(Hr)):
@@ -60,17 +62,19 @@ def modHR(Hr):
 		
 		
 		subdate = datetime.datetime(year,month,day)
-		# update scoring system changed on 2/21/18
 
-		if subdate <= deadline:
+		if subdate <= deadline:				# update scoring system changed on 2/21/18
 			grade = float(Hr[row][totalScoreColumn])
 			if grade == 10:
-				Hr[row][11] = 30
+				Hr[row][totalScoreColumn] = 30
+				maxScore =float(Hr[row][maxColumn])
+				Hr[row][percentColumn] = Hr[row][totalScoreColumn] / maxScore
 			elif grade == 40:
-				Hr[row][11] = 70
+				Hr[row][totalScoreColumn] = 70
+				maxScore =float(Hr[row][maxColumn])
+				Hr[row][percentColumn] = Hr[row][totalScoreColumn]/ maxScore
 			elif grade > 100:
-				Hr[row][11] = 100
-				
+				Hr[row][totalScoreColumn] = 100
 				
 		
 		
@@ -231,7 +235,7 @@ def updateCanvas(ca, hr, col, scale):
 	noMatchz = []
 	header = hr[0]
 	loginIDindex = header.index('Login ID')
-	#ScoreColumn = header.index('Percentage score')
+	ScoreColumn = header.index('Percentage score')
 	print("Percentage score index", ScoreColumn)
 	for row in range(1, len(hr)): # go thru each submission in hackerRank
 		tuID = hr[row][loginIDindex]
