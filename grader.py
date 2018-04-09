@@ -51,7 +51,6 @@ def modHR(Hr):
 	totalScoreColumn = header.index('Total score')
 	percentColumn = header.index('Percentage score')
 	maxColumn = header.index('Max score')
-	#print("found login ID index", loginIDindex )
 	
 	for row in range(1, len(Hr)):
 		loginID =Hr[row][loginIDindex]
@@ -66,15 +65,15 @@ def modHR(Hr):
 		if subdate <= deadline:				# update scoring system changed on 2/21/18
 			grade = float(Hr[row][totalScoreColumn])
 			if grade == 10:
-				Hr[row][totalScoreColumn] = 30
-				maxScore =float(Hr[row][maxColumn])
-				Hr[row][percentColumn] = Hr[row][totalScoreColumn] / maxScore
+				Hr[row][percentColumn] = 30
+				#maxScore =float(Hr[row][maxColumn])
+				#Hr[row][percentColumn] = Hr[row][totalScoreColumn] / maxScore
 			elif grade == 40:
-				Hr[row][totalScoreColumn] = 70
-				maxScore =float(Hr[row][maxColumn])
-				Hr[row][percentColumn] = Hr[row][totalScoreColumn]/ maxScore
+				Hr[row][percentColumn] = 70
+				#maxScore =float(Hr[row][maxColumn])
+				#Hr[row][percentColumn] = Hr[row][totalScoreColumn]/ maxScore
 			elif grade > 100:
-				Hr[row][totalScoreColumn] = 100
+				Hr[row][percentColumn] = 100
 				
 		
 		
@@ -242,6 +241,8 @@ def updateCanvas(ca, hr, col, scale):
 		grade = float(hr[row][ScoreColumn])  # imported HR grade
 		if grade == 0:
 			continue
+		if grade >100:
+			grade = 100
 		grade = grade*scale
 		hrName = hr[row][2]
 		hrEmail = hr[row][17]
